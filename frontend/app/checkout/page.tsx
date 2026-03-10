@@ -11,6 +11,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,6 +20,16 @@ export default function CheckoutPage() {
     country: '',
     zipCode: '',
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && items.length === 0) {
+      router.push('/cart');
+    }
+  }, [mounted, items, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,15 +48,14 @@ export default function CheckoutPage() {
       });
 
       // Create Stripe checkout session
-      const origin = typeof window !== 'undefined' ? window.location.origin : '';
       const { url } = await api.createCheckoutSession(
         order.id,
-        `${origin}/order-success`,
-        `${origin}/cart`
+        `${window.location.origin}/order-success`,
+        `${window.location.origin}/cart`
       );
 
       // Redirect to Stripe checkout
-      if (url && typeof window !== 'undefined') {
+      if (url) {
         window.location.href = url;
       }
     } catch (error) {
@@ -55,9 +65,12 @@ export default function CheckoutPage() {
     }
   };
 
-  if (items.length === 0) {
-    router.push('/cart');
-    return null;
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    );
   }
 
   return (
