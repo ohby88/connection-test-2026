@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/CartContext';
 import { api } from '@/lib/api';
+
+export const dynamic = 'force-dynamic';
 
 export default function CheckoutPage() {
   const router = useRouter();
