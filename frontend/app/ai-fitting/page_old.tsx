@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { api, Product, AIFittingResult } from '@/lib/api';
-import ImageUpload from '@/components/ImageUpload';
 
 export default function AIFittingPage() {
   const searchParams = useSearchParams();
@@ -35,12 +34,13 @@ export default function AIFittingPage() {
     try {
       setLoading(true);
       const fitting = await api.createAIFitting({
-        user_id: 'demo-user',
+        user_id: 'demo-user', // TODO: Replace with actual user ID from auth
         dog_image_url: dogImageUrl,
         product_id: parseInt(productId),
       });
       setResult(fitting);
 
+      // Poll for result if processing
       if (fitting.status === 'processing') {
         pollForResult(fitting.id);
       }
@@ -97,11 +97,22 @@ export default function AIFittingPage() {
         )}
 
         <div className="space-y-6">
-          {/* Image Upload */}
-          <ImageUpload
-            label="Upload Your Dog's Photo"
-            onUploadComplete={(url) => setDogImageUrl(url)}
-          />
+          {/* Input */}
+          <div>
+            <label className="block font-semibold mb-2">
+              Dog Photo URL
+            </label>
+            <input
+              type="url"
+              value={dogImageUrl}
+              onChange={(e) => setDogImageUrl(e.target.value)}
+              placeholder="https://example.com/dog-photo.jpg"
+              className="w-full border rounded-lg px-4 py-2"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Paste a URL to your dog's photo (for demo purposes)
+            </p>
+          </div>
 
           {/* Generate Button */}
           <button

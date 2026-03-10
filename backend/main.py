@@ -36,10 +36,13 @@ async def health_check():
     return {"status": "healthy"}
 
 # API Routes
-from backend.api.routes import products, ai_fitting
+from backend.api.routes import products, ai_fitting, orders, payment, upload
 
 app.include_router(products.router, prefix="/api")
 app.include_router(ai_fitting.router, prefix="/api")
+app.include_router(orders.router, prefix="/api")
+app.include_router(payment.router, prefix="/api")
+app.include_router(upload.router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn

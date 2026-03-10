@@ -35,6 +35,29 @@ export interface AIFittingResult {
   created_at: string;
 }
 
+export interface OrderItem {
+  product_id: number;
+  quantity: number;
+  price: number;
+}
+
+export interface OrderCreate {
+  user_id: string;
+  items: OrderItem[];
+  shipping_address: any;
+}
+
+export interface Order {
+  id: string;
+  user_id: string;
+  items: OrderItem[];
+  total_amount: number;
+  status: string;
+  stripe_payment_id?: string;
+  shipping_address: any;
+  created_at: string;
+}
+
 export const api = {
   // Products
   async getProducts(params?: {
@@ -89,6 +112,54 @@ export const api = {
   async getUserFittings(userId: string): Promise<AIFittingResult[]> {
     const response = await fetch(`${API_URL}/api/ai-fitting/user/${userId}`);
     if (!response.ok) throw new Error('Failed to fetch user fittings');
+    return response.json();
+  },
+
+  // Orders
+  async createOrder(order: OrderCreate): Promise<Order> {
+    const response = await fetch(`${API_URL}/api/orders/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    });
+    if (!response.ok) throw new Error('Failed to create order');
+    return response.json();
+  },
+
+  async getOrder(id: string): Promise<Order> {
+    const response = await fetch(`${API_URL}/api/orders/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch order');
+    return response.json();
+  },
+
+  async getUserOrders(userId: string): Promise<Order[]> {
+    const response = await fetch(`${API_URL}/api/orders/user/${userId}`);
+    if (!response.ok) throw new Error('Failed to fetch user orders');
+    return response.json();
+  },
+
+  // Payment
+  async createCheckoutSession(orderId: string, successUrl: string, cancelUrl: string) {
+    const response = await fetch(`${API_URL}/api/payment/create-checkout-session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+      }),
+    });
+    if (!response.ok) throw new Error('Failed to create checkout session');
+    return response.json();
+  },
+
+  async getStripeSession(sessionId: string) {
+    const response = await fetch(`${API_URL}/api/payment/session/${sessionId}`);
+    if (!response.ok) throw new Error('Failed to fetch session');
     return response.json();
   },
 };

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { CartProvider } from "@/lib/CartContext";
-import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Dog Fashion Shop - AI Virtual Fitting",
@@ -11,16 +9,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.Node;
 }>) {
   return (
     <html lang="en">
-      <body>
-        <CartProvider>
-          <Navbar />
-          {children}
-        </CartProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

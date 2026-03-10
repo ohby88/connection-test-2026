@@ -4,15 +4,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { api, Product } from '@/lib/api';
-import { useCart } from '@/lib/CartContext';
 
 export default function ProductDetailPage() {
   const params = useParams();
   const productId = parseInt(params.id as string);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-  const { addItem } = useCart();
 
   useEffect(() => {
     loadProduct();
@@ -27,13 +24,6 @@ export default function ProductDetailPage() {
       console.error('Failed to load product:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (product) {
-      addItem(product, quantity);
-      alert('Added to cart!');
     }
   };
 
@@ -107,32 +97,9 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Quantity Selector */}
-            {product.stock > 0 && (
-              <div className="mb-4">
-                <label className="block font-semibold mb-2">Quantity:</label>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 border rounded hover:bg-gray-100"
-                  >
-                    -
-                  </button>
-                  <span className="w-16 text-center text-lg">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                    className="w-10 h-10 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Actions */}
             <div className="space-y-4">
               <button
-                onClick={handleAddToCart}
                 disabled={product.stock === 0}
                 className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
