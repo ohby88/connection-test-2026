@@ -35,8 +35,11 @@ async def root():
 async def health_check():
     return {"status": "healthy"}
 
-# API Routes will be added here
-# from api.routes import products, auth, orders, ai_fitting
+# API Routes
+from backend.api.routes import products, ai_fitting
+
+app.include_router(products.router, prefix="/api")
+app.include_router(ai_fitting.router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
