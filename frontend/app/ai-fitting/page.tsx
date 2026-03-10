@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { api, Product, AIFittingResult } from '@/lib/api';
 import ImageUpload from '@/components/ImageUpload';
 
-export default function AIFittingPage() {
+function AIFittingContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('productId');
 
@@ -165,5 +165,17 @@ export default function AIFittingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AIFittingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    }>
+      <AIFittingContent />
+    </Suspense>
   );
 }

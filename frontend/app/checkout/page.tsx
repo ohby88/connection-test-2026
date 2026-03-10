@@ -35,14 +35,15 @@ export default function CheckoutPage() {
       });
 
       // Create Stripe checkout session
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
       const { url } = await api.createCheckoutSession(
         order.id,
-        `${window.location.origin}/order-success`,
-        `${window.location.origin}/cart`
+        `${origin}/order-success`,
+        `${origin}/cart`
       );
 
       // Redirect to Stripe checkout
-      if (url) {
+      if (url && typeof window !== 'undefined') {
         window.location.href = url;
       }
     } catch (error) {
