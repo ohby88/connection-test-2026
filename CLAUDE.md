@@ -52,10 +52,14 @@ dog-fashion-shop/
 - [x] GitHub 저장소 설정 완료
 - [x] 기술 스택 최종 결정
 - [x] 프로젝트 구조 생성
-- [ ] Backend API 개발
-- [ ] Frontend UI 개발
-- [ ] AI 피팅 기능 구현
-- [ ] 배포
+- [x] Backend API 개발 (Products, Orders, Payment, AI Fitting, Upload)
+- [x] Frontend UI 개발 (홈, 상품, 장바구니, 체크아웃, AI 피팅)
+- [x] 장바구니 및 상태 관리
+- [x] Stripe 결제 연동
+- [x] 이미지 업로드 (Supabase Storage)
+- [ ] Supabase 설정 및 테스트
+- [ ] Replicate API 설정
+- [ ] 배포 (Vercel + Railway)
 
 ## Git 정보
 - 저장소: https://github.com/ohby88/connection-test-2026
